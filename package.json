@@ -5,10 +5,11 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
+    "build": "mkdir -p scripts && browserify scripts/injector-template.js -p esmify > public/build/polyflow-bundle.js",
+    "start": "http-server -p 5743"
   },
   "dependencies": {
-    "@polyflow/sdk": "^1.0.2",
+    "@polyflow/sdk": "^1.0.3",
     "browserify": "^17.0.0",
     "esmify": "^2.1.1",
     "express": "^4.18.2"

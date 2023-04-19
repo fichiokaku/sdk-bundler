@@ -25,7 +25,7 @@ app.get('/generate', async (req, res) => {
     if (!buildExists) {
         const tempPath = tempFolder + fileName;
         fs.writeFileSync(tempFolder + fileName, injectorTemplate.replace(API_KEY_ID, `"${api}"`));
-        execSync(`npx browserify ${tempPath} -p esmify > ${buildPath}`);
+        execSync(`npx browserify ${tempPath} -p esmify | npx uglifyjs > ${buildPath}`);
     }
     
     res.sendFile(buildPath);

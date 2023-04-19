@@ -9,7 +9,7 @@
     "start": "http-server -p 5743"
   },
   "dependencies": {
-    "@polyflow/sdk": "^1.0.3",
+    "@polyflow/sdk": "^1.0.7",
     "browserify": "^17.0.0",
     "esmify": "^2.1.1",
     "express": "^4.18.2"

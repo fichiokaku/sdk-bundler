@@ -2,6 +2,8 @@ const crypto = require('crypto');
 const fs = require('fs');
 const execSync = require('child_process').execSync;
 const express = require('express');
+const PF_VERSION = require('./node_modules/@polyflow/sdk/package.json').version;
+
 const app = express();
 const port = 5555
 
@@ -20,12 +22,12 @@ app.get('/generate', async (req, res) => {
         return;
     }
 
-    const fileName = crypto.createHash("sha256").update(`${api}`).digest("hex") + ".js";
+    const params = logEnabled ? `"${api}", { logEnabled: true }` : `"${api}"`;
+
+    const fileName = crypto.createHash("sha256").update(params + PF_VERSION).digest("hex") + ".js";
     const buildPath = buildFolder + fileName;
     const buildExists = fs.existsSync(buildPath);
     
-    const params = logEnabled ? `"${api}", { logEnabled: true }` : `"${api}"`;
-
     if (!buildExists) {
         const tempPath = tempFolder + fileName;
         fs.writeFileSync(tempFolder + fileName, injectorTemplate.replace(API_KEY_ID, params));

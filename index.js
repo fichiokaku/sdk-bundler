@@ -13,6 +13,12 @@ const tempFolder = __dirname + "/public/temp/";
 const API_KEY_ID = `"API_KEY"`;
 const injectorTemplate = fs.readFileSync(__dirname + "/scripts/injector-template.js", "utf-8");
 
+app.get('/', async (req, res) => {
+    res.send({
+        sdk: PF_VERSION 
+    });
+});
+
 app.get('/generate', async (req, res) => {
     const api = req.query.api;
     const logEnabled = req.query.logEnabled;

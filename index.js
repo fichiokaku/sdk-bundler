@@ -13,6 +13,8 @@ const injectorTemplate = fs.readFileSync(__dirname + "/scripts/injector-template
 
 app.get('/generate', async (req, res) => {
     const api = req.query.api;
+    const logEnabled = req.query.logEnabled;
+
     if (!api) {
         res.status(400);
         return;
@@ -22,9 +24,11 @@ app.get('/generate', async (req, res) => {
     const buildPath = buildFolder + fileName;
     const buildExists = fs.existsSync(buildPath);
     
+    const params = logEnabled ? `"${api}", { logEnabled: true }` : `"${api}"`;
+
     if (!buildExists) {
         const tempPath = tempFolder + fileName;
-        fs.writeFileSync(tempFolder + fileName, injectorTemplate.replace(API_KEY_ID, `"${api}"`));
+        fs.writeFileSync(tempFolder + fileName, injectorTemplate.replace(API_KEY_ID, params));
         execSync(`npx browserify ${tempPath} -p esmify | npx uglifyjs > ${buildPath}`);
     }
     

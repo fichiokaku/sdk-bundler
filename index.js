@@ -22,13 +22,14 @@ app.get('/', async (req, res) => {
 app.get('/generate', async (req, res) => {
     const api = req.query.api;
     const logEnabled = req.query.logEnabled;
+    const stagingEnabled = req.query.stagingEnabled;
 
     if (!api) {
         res.status(400);
         return;
     }
 
-    const params = logEnabled ? `"${api}", { logEnabled: true }` : `"${api}"`;
+    const params = `"${api}", { logEnabled: ${logEnabled}, stagingModeEnabled: ${stagingEnabled} }`;
 
     const fileName = crypto.createHash("sha256").update(params + PF_VERSION).digest("hex") + ".js";
     const buildPath = buildFolder + fileName;

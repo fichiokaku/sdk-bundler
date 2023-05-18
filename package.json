@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "mkdir -p dist && browserify scripts/injector-template.js -p esmify | uglifyjs -c -m > dist/polyflow-bundle.js",
-    "start": "http-server -p 5743"
+    "start": "node index.js"
   },
   "dependencies": {
     "@polyflow/sdk": "^1.0.18",

@@ -12,7 +12,7 @@ const BUILD = fs.readFileSync(__dirname + "/dist/polyflow-bundle.js", "utf-8");
 app.use(logger('common', {
     stream: fs.createWriteStream('./access.log', { flags: 'a' })
 }));
-app.use(logger('dev'));
+app.use(logger('common'));
 
 app.get('/', async (req, res) => {
     res.send({

@@ -1,17 +1,18 @@
-const crypto = require('crypto');
 const fs = require('fs');
-const execSync = require('child_process').execSync;
 const express = require('express');
+const logger = require('morgan');
 const PF_VERSION = require('./node_modules/@polyflow/sdk/package.json').version;
 
 const app = express();
 const port = 5555
 
-const buildFolder = __dirname + "/public/build/";
-const tempFolder = __dirname + "/public/temp/";
-
 const API_KEY_ID = `"API_KEY"`;
-const injectorTemplate = fs.readFileSync(__dirname + "/scripts/injector-template.js", "utf-8");
+const BUILD = fs.readFileSync(__dirname + "/dist/polyflow-bundle.js", "utf-8");
+
+app.use(logger('common', {
+    stream: fs.createWriteStream('./access.log', { flags: 'a' })
+}));
+app.use(logger('dev'));
 
 app.get('/', async (req, res) => {
     res.send({
@@ -19,29 +20,24 @@ app.get('/', async (req, res) => {
     });
 });
 
-app.get('/generate', async (req, res) => {
+app.get('/generate', async (req,res) => {
     const api = req.query.api;
-    const logEnabled = req.query.logEnabled;
-    const stagingEnabled = req.query.stagingEnabled;
+    const logEnabled = req.query.logEnabled ?? false;
+    const stagingEnabled = req.query.stagingEnabled ?? false;
 
     if (!api) {
         res.status(400);
+        res.send("Missing API key!");
         return;
     }
 
-    const params = `"${api}", { logEnabled: ${logEnabled}, stagingModeEnabled: ${stagingEnabled} }`;
-
-    const fileName = crypto.createHash("sha256").update(params + PF_VERSION).digest("hex") + ".js";
-    const buildPath = buildFolder + fileName;
-    const buildExists = fs.existsSync(buildPath);
-    
-    if (!buildExists) {
-        const tempPath = tempFolder + fileName;
-        fs.writeFileSync(tempFolder + fileName, injectorTemplate.replace(API_KEY_ID, params));
-        execSync(`npx browserify ${tempPath} -p esmify | npx uglifyjs > ${buildPath}`);
-    }
-    
-    res.sendFile(buildPath);
+    res.setHeader("Content-Type", "application/javascript");
+    res.send(
+        BUILD.replace(
+            API_KEY_ID,
+            `"${api}", { logEnabled: ${logEnabled}, stagingModeEnabled: ${stagingEnabled} }`
+        )
+    );
 });
 
 app.listen(port, () => {

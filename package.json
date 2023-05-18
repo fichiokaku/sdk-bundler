@@ -5,15 +5,15 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "mkdir -p scripts && browserify scripts/injector-template.js -p esmify > public/build/polyflow-bundle.js",
-    "build-minified": "mkdir -p scripts && browserify scripts/injector-template.js -p esmify | uglifyjs > public/build/polyflow-bundle.js",
+    "build": "mkdir -p dist && browserify scripts/injector-template.js -p esmify | uglifyjs -c -m > dist/polyflow-bundle.js",
     "start": "http-server -p 5743"
   },
   "dependencies": {
-    "@polyflow/sdk": "^1.0.16",
+    "@polyflow/sdk": "^1.0.18",
     "browserify": "^17.0.0",
     "esmify": "^2.1.1",
     "express": "^4.18.2",
+    "morgan": "^1.10.0",
     "uglify-js": "^3.17.4"
   },
   "author": "Polyflow",

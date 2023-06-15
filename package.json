@@ -9,7 +9,7 @@
     "start": "node index.js"
   },
   "dependencies": {
-    "@polyflow/sdk": "^1.0.20",
+    "@polyflow/sdk": "^1.0.21",
     "browserify": "^17.0.0",
     "esmify": "^2.1.1",
     "express": "^4.18.2",
